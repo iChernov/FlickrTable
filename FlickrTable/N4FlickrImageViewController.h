@@ -10,6 +10,6 @@
 
 @class N4FlickrImage;
 
-@interface N4FlickrImageViewController : UIViewController
+@interface N4FlickrImageViewController : UIViewController <UIScrollViewDelegate>
 - (id)initWithFlickrImage:(N4FlickrImage*)image;
 @end

@@ -10,38 +10,14 @@
 #import "N4FlickrConstants.h"
 #import "N4FlickrImage.h"
 #import "AFNetworking.h"
-#import <TMCache/TMCache.h>
 
 static NSString * const BaseURLString = @"https://api.flickr.com/services/rest?method=flickr.photos.getRecent";
-static NSString * const kN4ImageCache = @"N4ImageCache";
 
 @interface N4FlickerImageSource ()
-@property (strong, nonatomic) TMCache *p_privateCache;
 @property (strong, nonatomic) NSArray *p_images;
 @end
 
 @implementation N4FlickerImageSource
-
-+ (id)sharedCache {
-    static dispatch_once_t pred;
-    __strong static TMCache *_sharedCache = nil;
-    dispatch_once(&pred, ^{
-        _sharedCache = [[TMCache alloc] initWithName:kN4ImageCache];
-    });
-    return _sharedCache;
-}
-
-- (id)init
-{
-    self = [super init];
-    if(!self)
-    {
-        return nil;
-    }
-    _p_privateCache = [N4FlickerImageSource sharedCache];
-    
-    return self;
-}
 
 - (void)fetchRecentImagesWithCompletion:(void (^)(void))completion
 {

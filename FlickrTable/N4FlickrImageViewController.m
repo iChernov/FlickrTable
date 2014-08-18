@@ -8,10 +8,14 @@
 
 #import "N4FlickrImageViewController.h"
 #import "N4FlickrImage.h"
+#import "AFNetworking.h"
 
 @implementation N4FlickrImageViewController
 {
     N4FlickrImage *_image;
+    UIScrollView *_zoomScrollView;
+    UIImageView *_imageView;
+    UIActivityIndicatorView *_activityView;
 }
 
 #pragma mark - Initialization & Deallocation
@@ -25,23 +29,78 @@
 	return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    self.navigationItem.title = self.title;
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+
+    [self startActivityAnimation];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-        UIViewAutoresizingFlexibleHeight;
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.view addSubview:imageView];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height-70)];
+    _imageView.image = [UIImage imageNamed:@"placeholder.png"];
 
+    _activityView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 14, 14)];
+    [_activityView setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    [_activityView sizeToFit];
+    [_activityView setAutoresizingMask:(UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_activityView];
+    
+    _zoomScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    _zoomScrollView.contentSize = _imageView.bounds.size;
+    _zoomScrollView.delegate = self;
+    _zoomScrollView.minimumZoomScale = 1.0;
+    _zoomScrollView.maximumZoomScale = 4.0;
+    [_zoomScrollView setZoomScale:_zoomScrollView.minimumZoomScale];
+    self.view = _zoomScrollView;
+    [_zoomScrollView addSubview:_imageView];
+    _zoomScrollView.contentInset = UIEdgeInsetsZero;
+
+    [self loadImage];
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return _imageView;
+}
+
+- (void)startActivityAnimation {
+    [_activityView startAnimating];
+}
+
+- (void)stopActivityAnimation {
+    [_activityView stopAnimating];
+}
+
+- (void)loadImage {
+    _imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
+    UIViewAutoresizingFlexibleHeight;
+    _imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:_image.imageURLString]];
     [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
-
-    NSURLResponse *response;
-
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil];
-
-    imageView.image = [UIImage imageWithData:responseData];
+    
+    __block UIImageView * b_imageView = _imageView;
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFImageResponseSerializer serializer];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        b_imageView.image = responseObject;
+        [self.view setNeedsDisplay];
+        [self stopActivityAnimation];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Image"
+                                                            message:[error localizedDescription]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+        [self stopActivityAnimation];
+        [alertView show];
+    }];
+    [operation start];
 }
+
 @end

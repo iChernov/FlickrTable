@@ -13,7 +13,12 @@
 #import "N4FlickrImageCell.h"
 #import "N4FlickrImageViewController.h"
 #import "N4FlickrImage.h"
+#import "AFNetworking.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <TMCache/TMCache.h>
+
+static NSString * const kN4ImageCache = @"N4ImageCache";
+static const int pageCount = 20;
 
 @interface N4FlickerImageCacheInfo : NSData
 @property (nonatomic,copy) NSString *url;
@@ -25,6 +30,7 @@
 @end
 
 @interface N4FlickrImageListViewController ()
+@property (strong, nonatomic) TMCache *p_privateCache;
 @end
 
 
@@ -34,6 +40,15 @@
 }
 
 
++ (id)sharedCache {
+    static dispatch_once_t pred;
+    __strong static TMCache *_sharedCache = nil;
+    dispatch_once(&pred, ^{
+        _sharedCache = [[TMCache alloc] initWithName:kN4ImageCache];
+    });
+    return _sharedCache;
+}
+
 - (id)init
 {
     self = [super init];
@@ -41,24 +56,24 @@
     {
         return nil;
     }
+    _p_privateCache = [N4FlickrImageListViewController sharedCache];
+    
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    _imageSource = [N4FlickerImageSource new];
     self.tableView.rowHeight = 75.0f;
     [self.tableView registerClass:[N4FlickrImageCell class]
         forCellReuseIdentifier:NSStringFromClass([N4FlickrImageCell class])];
-
-    _imageSource = [N4FlickerImageSource new];
+    [self startActivityAnimation];
+    [self updatePhotos];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self startActivityAnimation];
     self.navigationItem.title = @"Recent Photos";
-    [self updatePhotos];
 }
 
 - (void)startActivityAnimation {
@@ -70,12 +85,37 @@
     [activityView startAnimating];
 }
 
+- (void)startLoadingPreviewWithPage:(int) pageNumber {
+    for (int i = pageNumber*pageCount; i < (pageNumber + 1)*pageCount; i++) {
+        N4FlickrImage *flickrImage = [_imageSource imageAtIndex:i];
+        [self loadPreviewForImageURLString: flickrImage.imagePreviewURLString];
+    }
+}
+
+- (void)loadPreviewForImageURLString:(NSString *)urlString {
+    UIImage *previewImage = [_p_privateCache objectForKey:urlString];
+    if (previewImage) {
+        return;
+    } else {
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:urlString]];
+        AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
+        [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [_p_privateCache setObject:responseObject forKey:urlString];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Image error: %@", error);
+        }];
+        [requestOperation start];
+    }
+}
+
 - (void)updatePhotos
 {
     __weak __typeof(self)weakSelf = self;
     [_imageSource fetchRecentImagesWithCompletion:^{
         [weakSelf.tableView reloadData];
         weakSelf.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(updatePhotos)];
+        [weakSelf startLoadingPreviewWithPage:0];
     }];
 }
 
@@ -89,9 +129,20 @@
     N4FlickrImage *flickrImage = [_imageSource imageAtIndex:indexPath.row];
     
     cell.title = flickrImage.title;
-    [cell.previewImageView setImageWithURL:[NSURL URLWithString:flickrImage.imagePreviewURLString]
-                   placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
+    UIImage *previewImage = [_p_privateCache objectForKey:flickrImage.imagePreviewURLString];
+    if (previewImage) {
+        cell.previewImageView.image = previewImage;
+    } else {
+        [cell.previewImageView sd_setImageWithURL:[NSURL URLWithString:flickrImage.imagePreviewURLString]
+                                 placeholderImage:[UIImage imageNamed:@"placeholder.png"]
+                                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [_p_privateCache setObject:image forKey:flickrImage.imagePreviewURLString];
+                                        }];
+    }
+    if(indexPath.row % pageCount == 3) {
+        [self startLoadingPreviewWithPage:indexPath.row/pageCount];
+    }
 	return cell;
 }
 
@@ -103,7 +154,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // show the selected image in our image view controller
-#warning presenting this causes a delay and the app hangs, maybe we can fix it?
 	N4FlickrImageViewController *ctrl = [[N4FlickrImageViewController alloc]
                                          initWithFlickrImage:[_imageSource imageAtIndex:indexPath.row]];
     [self.navigationController pushViewController:ctrl animated:YES];
