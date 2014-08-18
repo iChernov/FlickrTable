@@ -15,7 +15,6 @@
 @property (nonatomic,assign,readonly) NSUInteger count;
 
 - (void)fetchRecentImagesWithCompletion:(void (^)(void))completion;
-- (UIImage *)getPreviewImageForURL:(NSString *)previewURL;
 - (N4FlickrImage*)imageAtIndex:(NSUInteger)index;
 
 @end

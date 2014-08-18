@@ -11,7 +11,6 @@
 @implementation N4FlickrImageCell
 {
     UILabel *_label;
-    UIImageView *_imageView;
 }
 
 #pragma mark - Initialization & Deallocation
@@ -19,10 +18,10 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
 	if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
+        _previewImageView = [UIImageView new];
         _label = [UILabel new];
-        _imageView = [UIImageView new];
         [self addSubview:_label];
-        [self addSubview:_imageView];
+        [self addSubview:_previewImageView];
 	}
 	return self;
 }
@@ -41,16 +40,6 @@
     return _label.text;
 }
 
-- (void)setPreviewImage:(UIImage *)previewImage
-{
-    _imageView.image = previewImage;
-}
-
-- (UIImage*)previewImage
-{
-    return _imageView.image;
-}
-
 
 #pragma mark - UIView Methods
 
@@ -58,7 +47,7 @@
 {
     [super layoutSubviews];
     
-    _imageView.frame = (CGRect){0.0f, 0.0f,
+    _previewImageView.frame = (CGRect){0.0f, 0.0f,
         CGRectGetHeight(self.bounds), CGRectGetHeight(self.bounds)};
     _label.frame = (CGRect){CGRectGetHeight(self.bounds) + 10.0f, 0.0f,
     	CGRectGetWidth(self.bounds) - CGRectGetHeight(self.bounds) - 10.0f,

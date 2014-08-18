@@ -71,7 +71,6 @@ static NSString * const kN4ImageCache = @"N4ImageCache";
                 
                 N4FlickrImage * flickerImage = [[N4FlickrImage alloc] initWithTitle:imageTitle url:imageURL previewURL:previewURL];
                 //however, here ^^^ we also should pass NSStrings, not NSMutableStrings
-                [weakSelf loadPreview:previewURL withCompletion:nil];
                 [imagesArray addObject:flickerImage];
             }
             weakSelf.p_images = [imagesArray copy];
@@ -89,28 +88,6 @@ static NSString * const kN4ImageCache = @"N4ImageCache";
         [alertView show];
     }];
     [operation start];
-}
-
-- (void)loadPreview:(NSString *)previewURL withCompletion:(void(^)(UIImage *previewImage, NSError *error)) completion {
-    // we have not downloaded this image, download it now and add to cache
-    // but we have to do that in a background!
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:previewURL]];
-    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    operation.responseSerializer = [AFImageResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [_p_privateCache setObject:responseObject forKey:previewURL];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    }];
-    [operation start];
-}
-
-- (UIImage *)getPreviewImageForURL:(NSString *)previewURL{
-    UIImage* previewImage = [_p_privateCache objectForKey:previewURL];
-    return previewImage;
 }
 
 - (NSUInteger)count

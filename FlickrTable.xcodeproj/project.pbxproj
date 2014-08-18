@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		017E5ED8ABBF4F0EB08F447D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59BED22812CB4DCFBEB36BC9 /* libPods.a */; };
+		762EEE5719A21AEA00F408BD /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 762EEE5619A21AEA00F408BD /* placeholder.png */; };
 		AA1058A217A69CBC00234097 /* N4AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AA10589717A69CBC00234097 /* N4AppDelegate.m */; };
 		AA1058A417A69CBC00234097 /* N4FlickrImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA10589C17A69CBC00234097 /* N4FlickrImageCell.m */; };
 		AA1058A517A69CBC00234097 /* N4FlickrImageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA10589E17A69CBC00234097 /* N4FlickrImageListViewController.m */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		3E05A5E966FC4C4E8A9E9CA8 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		59BED22812CB4DCFBEB36BC9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		762EEE5619A21AEA00F408BD /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		AA10589617A69CBC00234097 /* N4AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N4AppDelegate.h; sourceTree = "<group>"; };
 		AA10589717A69CBC00234097 /* N4AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N4AppDelegate.m; sourceTree = "<group>"; };
 		AA10589A17A69CBC00234097 /* N4FlickrConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N4FlickrConstants.h; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				AAEEEEEE17A69A5900584145 /* apple-touch-icon-72x72-precomposed.png */,
 				AAEEEEEC17A69A4200584145 /* Icon@2x.png */,
 				AAEEEEEA17A69A3C00584145 /* Icon.png */,
+				762EEE5619A21AEA00F408BD /* placeholder.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				AAEEEED717A697D200584145 /* Default.png in Resources */,
 				AAEEEED917A697D200584145 /* Default@2x.png in Resources */,
 				AAEEEEDB17A697D200584145 /* Default-568h@2x.png in Resources */,
+				762EEE5719A21AEA00F408BD /* placeholder.png in Resources */,
 				AAEEEEEB17A69A3C00584145 /* Icon.png in Resources */,
 				AAEEEEED17A69A4200584145 /* Icon@2x.png in Resources */,
 				AAEEEEEF17A69A5900584145 /* apple-touch-icon-72x72-precomposed.png in Resources */,

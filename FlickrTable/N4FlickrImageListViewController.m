@@ -13,6 +13,7 @@
 #import "N4FlickrImageCell.h"
 #import "N4FlickrImageViewController.h"
 #import "N4FlickrImage.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface N4FlickerImageCacheInfo : NSData
 @property (nonatomic,copy) NSString *url;
@@ -88,7 +89,8 @@
     N4FlickrImage *flickrImage = [_imageSource imageAtIndex:indexPath.row];
     
     cell.title = flickrImage.title;
-    cell.previewImage = [_imageSource getPreviewImageForURL:flickrImage.imagePreviewURLString];
+    [cell.previewImageView setImageWithURL:[NSURL URLWithString:flickrImage.imagePreviewURLString]
+                   placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     
 	return cell;
 }

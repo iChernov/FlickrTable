@@ -10,5 +10,5 @@
 
 @interface N4FlickrImageCell : UITableViewCell
 @property (nonatomic, assign) NSString *title;
-@property (nonatomic, assign) UIImage *previewImage;
+@property (nonatomic, strong) UIImageView *previewImageView;
 @end
