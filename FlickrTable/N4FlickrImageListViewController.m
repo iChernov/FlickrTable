@@ -13,21 +13,17 @@
 #import "N4FlickrImageCell.h"
 #import "N4FlickrImageViewController.h"
 #import "N4FlickrImage.h"
-#import "AFNetworking.h"
-#import <TMCache/TMCache.h>
 
 @interface N4FlickerImageCacheInfo : NSData
 @property (nonatomic,copy) NSString *url;
 @property (nonatomic,copy) UIImage *image;
 @end
 
-static NSString * const kN4ImageCache = @"N4ImageCache";
 
 @implementation N4FlickerImageCacheInfo
 @end
 
 @interface N4FlickrImageListViewController ()
-@property (strong, nonatomic) TMCache *p_privateCache;
 @end
 
 
@@ -36,14 +32,6 @@ static NSString * const kN4ImageCache = @"N4ImageCache";
     N4FlickerImageSource *_imageSource;
 }
 
-+ (id)sharedCache {
-    static dispatch_once_t pred;
-    __strong static TMCache *_sharedCache = nil;
-    dispatch_once(&pred, ^{
-        _sharedCache = [[TMCache alloc] initWithName:kN4ImageCache];
-    });
-    return _sharedCache;
-}
 
 - (id)init
 {
@@ -52,8 +40,6 @@ static NSString * const kN4ImageCache = @"N4ImageCache";
     {
         return nil;
     }
-    _p_privateCache = [N4FlickrImageListViewController sharedCache];
-
     return self;
 }
 
@@ -102,44 +88,8 @@ static NSString * const kN4ImageCache = @"N4ImageCache";
     N4FlickrImage *flickrImage = [_imageSource imageAtIndex:indexPath.row];
     
     cell.title = flickrImage.title;
-    cell.previewImage = nil;
-
-    N4FlickerImageCacheInfo *currentImageCacheInfo; //just "found" = bad naming, seems like it is a BOOL value
-
-    // search our cache if we already downloaded this image
-    currentImageCacheInfo = [_p_privateCache objectForKey:flickrImage.imagePreviewURLString];
-
-    if(currentImageCacheInfo)
-    {
-        // we already downloaded this image, we can use it now
-        cell.previewImage = currentImageCacheInfo.image;
-    }
-    else
-    {
-        // we have not downloaded this image, download it now and add to cache
-        // but we have to do that in a background!
-        currentImageCacheInfo = [N4FlickerImageCacheInfo new];
-        currentImageCacheInfo.url = flickrImage.imagePreviewURLString;
-        [_p_privateCache setObject:currentImageCacheInfo forKey:flickrImage.imagePreviewURLString];
-
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:flickrImage.imagePreviewURLString]];
-        [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
-        
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        operation.responseSerializer = [AFImageResponseSerializer serializer];
-        
-        __block N4FlickerImageCacheInfo *b_currentImageCacheInfo = currentImageCacheInfo;
-        __block N4FlickrImageCell *b_cell = cell;
-        
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            b_currentImageCacheInfo.image = responseObject;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                b_cell.previewImage = currentImageCacheInfo.image;
-            });
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        }];
-        [operation start];
-    }
+    cell.previewImage = [_imageSource getPreviewImageForURL:flickrImage.imagePreviewURLString];
+    
 	return cell;
 }
 

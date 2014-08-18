@@ -10,14 +10,38 @@
 #import "N4FlickrConstants.h"
 #import "N4FlickrImage.h"
 #import "AFNetworking.h"
+#import <TMCache/TMCache.h>
 
 static NSString * const BaseURLString = @"https://api.flickr.com/services/rest?method=flickr.photos.getRecent";
+static NSString * const kN4ImageCache = @"N4ImageCache";
 
 @interface N4FlickerImageSource ()
-@property (strong, nonatomic) NSArray *p_images; //previously, as an instance variable, was never initialized
+@property (strong, nonatomic) TMCache *p_privateCache;
+@property (strong, nonatomic) NSArray *p_images;
 @end
 
 @implementation N4FlickerImageSource
+
++ (id)sharedCache {
+    static dispatch_once_t pred;
+    __strong static TMCache *_sharedCache = nil;
+    dispatch_once(&pred, ^{
+        _sharedCache = [[TMCache alloc] initWithName:kN4ImageCache];
+    });
+    return _sharedCache;
+}
+
+- (id)init
+{
+    self = [super init];
+    if(!self)
+    {
+        return nil;
+    }
+    _p_privateCache = [N4FlickerImageSource sharedCache];
+    
+    return self;
+}
 
 - (void)fetchRecentImagesWithCompletion:(void (^)(void))completion
 {
@@ -47,6 +71,7 @@ static NSString * const BaseURLString = @"https://api.flickr.com/services/rest?m
                 
                 N4FlickrImage * flickerImage = [[N4FlickrImage alloc] initWithTitle:imageTitle url:imageURL previewURL:previewURL];
                 //however, here ^^^ we also should pass NSStrings, not NSMutableStrings
+                [weakSelf loadPreview:previewURL withCompletion:nil];
                 [imagesArray addObject:flickerImage];
             }
             weakSelf.p_images = [imagesArray copy];
@@ -64,6 +89,28 @@ static NSString * const BaseURLString = @"https://api.flickr.com/services/rest?m
         [alertView show];
     }];
     [operation start];
+}
+
+- (void)loadPreview:(NSString *)previewURL withCompletion:(void(^)(UIImage *previewImage, NSError *error)) completion {
+    // we have not downloaded this image, download it now and add to cache
+    // but we have to do that in a background!
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:previewURL]];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFImageResponseSerializer serializer];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [_p_privateCache setObject:responseObject forKey:previewURL];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    }];
+    [operation start];
+}
+
+- (UIImage *)getPreviewImageForURL:(NSString *)previewURL{
+    UIImage* previewImage = [_p_privateCache objectForKey:previewURL];
+    return previewImage;
 }
 
 - (NSUInteger)count
