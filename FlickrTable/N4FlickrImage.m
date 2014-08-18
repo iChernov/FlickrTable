@@ -13,8 +13,8 @@
 - (id)initWithTitle:(NSString*)title url:(NSString*)url previewURL:(NSString*)previewURL
 {
     _title = title;
-    _url = url;
-    _previewURL = previewURL;
+    _imageURLString = url;
+    _imagePreviewURLString = previewURL;
     return self;
 }
 

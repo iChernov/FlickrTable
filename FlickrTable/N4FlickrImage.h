@@ -10,8 +10,8 @@
 
 @interface N4FlickrImage : NSObject
 @property (nonatomic,copy,readonly) NSString *title;
-@property (nonatomic,copy,readonly) NSString *url;
-@property (nonatomic,copy,readonly) NSString *previewURL;
+@property (nonatomic,copy,readonly) NSString *imageURLString;
+@property (nonatomic,copy,readonly) NSString *imagePreviewURLString;
 
 - (id)initWithTitle:(NSString*)title url:(NSString*)url previewURL:(NSString*)previewURL;
 @end

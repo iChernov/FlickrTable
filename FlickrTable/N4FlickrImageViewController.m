@@ -35,7 +35,7 @@
     imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:imageView];
 
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:_image.url]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:_image.imageURLString]];
     [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
     NSURLResponse *response;
