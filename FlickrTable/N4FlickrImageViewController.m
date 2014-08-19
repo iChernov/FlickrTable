@@ -9,6 +9,7 @@
 #import "N4FlickrImageViewController.h"
 #import "N4FlickrImage.h"
 #import "AFNetworking.h"
+#import "NSFavoritesManager.h"
 
 @implementation N4FlickrImageViewController
 {
@@ -72,6 +73,25 @@
 
 - (void)stopActivityAnimation {
     [_activityView stopAnimating];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addToFavorites)];
+}
+
+- (void)addToFavorites {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add image to favorites"
+                                                    message:@"Enter comment"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:@"OK", nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        NSString *comment = [alertView textFieldAtIndex:0].text;
+        NSFavoritesManager *manager = [NSFavoritesManager sharedManager];
+        [manager addNewFavorite:_imageView.image withTitle:_image.title andComment:comment];
+    }
 }
 
 - (void)loadImage {

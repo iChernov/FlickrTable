@@ -116,7 +116,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FlickrTable/N4FlickerImageSource.m"
@@ -132,31 +132,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "FlickrTable/N4FlickrImageListViewController.m"
-            timestampString = "430057505.242244"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FlickrTable/N4FlickrImageViewController.m"
-            timestampString = "430056173.900788"
+            timestampString = "430058968.43766"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "-loadImage"
             landmarkType = "5">
             <Locations>
@@ -167,11 +151,11 @@
                   symbolName = "-[N4FlickrImageViewController loadImage]"
                   moduleName = "FlickrTable"
                   urlString = "file:///Users/iChernov/Development/FlickrTable/FlickrTable/N4FlickrImageViewController.m"
-                  timestampString = "430057443.06261"
+                  timestampString = "430059649.441924"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "85"
-                  endingLineNumber = "85"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
                   offsetFromSymbolStart = "347">
                </Location>
                <Location
@@ -181,11 +165,11 @@
                   symbolName = "__Block_byref_object_copy_"
                   moduleName = "FlickrTable"
                   urlString = "file:///Users/iChernov/Development/FlickrTable/FlickrTable/N4FlickrImageViewController.m"
-                  timestampString = "430057443.062788"
+                  timestampString = "430059649.442131"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "85"
-                  endingLineNumber = "85"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
                   offsetFromSymbolStart = "19">
                </Location>
                <Location
@@ -195,11 +179,11 @@
                   symbolName = "__Block_byref_object_dispose_"
                   moduleName = "FlickrTable"
                   urlString = "file:///Users/iChernov/Development/FlickrTable/FlickrTable/N4FlickrImageViewController.m"
-                  timestampString = "430057443.06294"
+                  timestampString = "430059649.442285"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "85"
-                  endingLineNumber = "85"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
                   offsetFromSymbolStart = "17">
                </Location>
             </Locations>
@@ -212,12 +196,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FlickrTable/N4FlickrImageViewController.m"
-            timestampString = "430055852.675072"
+            timestampString = "430058968.43766"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
             landmarkName = "-initWithFlickrImage:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FlickrTable/N4FlickrImageListViewController.m"
+            timestampString = "430059554.672"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "-startLoadingPreviewWithPage:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FlickrTable/N4FlickrImageViewController.m"
+            timestampString = "430058968.43766"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "-alertView:clickedButtonAtIndex:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FlickrTable/N4FlickrImageListViewController.m"
+            timestampString = "430059568.506633"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -228,12 +260,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FlickrTable/N4FlickrImageListViewController.m"
-            timestampString = "430057505.242244"
+            timestampString = "430059633.553497"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "-startLoadingPreviewWithPage:"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "-showFavorites"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

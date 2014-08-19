@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		017E5ED8ABBF4F0EB08F447D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59BED22812CB4DCFBEB36BC9 /* libPods.a */; };
 		762EEE5719A21AEA00F408BD /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 762EEE5619A21AEA00F408BD /* placeholder.png */; };
+		762EEE5D19A229B000F408BD /* NSFavoritesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 762EEE5C19A229B000F408BD /* NSFavoritesManager.m */; };
+		762EEE6119A22C7600F408BD /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 762EEE5F19A22C7600F408BD /* Model.xcdatamodeld */; };
+		762EEE6719A22D1400F408BD /* N4ImageEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 762EEE6619A22D1400F408BD /* N4ImageEntity.m */; };
 		AA1058A217A69CBC00234097 /* N4AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AA10589717A69CBC00234097 /* N4AppDelegate.m */; };
 		AA1058A417A69CBC00234097 /* N4FlickrImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA10589C17A69CBC00234097 /* N4FlickrImageCell.m */; };
 		AA1058A517A69CBC00234097 /* N4FlickrImageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA10589E17A69CBC00234097 /* N4FlickrImageListViewController.m */; };
@@ -33,6 +36,11 @@
 		3E05A5E966FC4C4E8A9E9CA8 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		59BED22812CB4DCFBEB36BC9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		762EEE5619A21AEA00F408BD /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
+		762EEE5B19A229B000F408BD /* NSFavoritesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSFavoritesManager.h; sourceTree = "<group>"; };
+		762EEE5C19A229B000F408BD /* NSFavoritesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSFavoritesManager.m; sourceTree = "<group>"; };
+		762EEE6019A22C7600F408BD /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		762EEE6519A22D1400F408BD /* N4ImageEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N4ImageEntity.h; sourceTree = "<group>"; };
+		762EEE6619A22D1400F408BD /* N4ImageEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N4ImageEntity.m; sourceTree = "<group>"; };
 		AA10589617A69CBC00234097 /* N4AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N4AppDelegate.h; sourceTree = "<group>"; };
 		AA10589717A69CBC00234097 /* N4AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = N4AppDelegate.m; sourceTree = "<group>"; };
 		AA10589A17A69CBC00234097 /* N4FlickrConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = N4FlickrConstants.h; sourceTree = "<group>"; };
@@ -90,6 +98,16 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		762EEE5E19A22C6300F408BD /* CoreData Model */ = {
+			isa = PBXGroup;
+			children = (
+				762EEE6519A22D1400F408BD /* N4ImageEntity.h */,
+				762EEE6619A22D1400F408BD /* N4ImageEntity.m */,
+				762EEE5F19A22C7600F408BD /* Model.xcdatamodeld */,
+			);
+			name = "CoreData Model";
+			sourceTree = "<group>";
+		};
 		AAEEEEB817A697D200584145 = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +141,7 @@
 		AAEEEECA17A697D200584145 /* FlickrTable */ = {
 			isa = PBXGroup;
 			children = (
+				762EEE5E19A22C6300F408BD /* CoreData Model */,
 				AA10589617A69CBC00234097 /* N4AppDelegate.h */,
 				AA10589717A69CBC00234097 /* N4AppDelegate.m */,
 				AA1058C917A6B24A00234097 /* N4FlickerImageSource.h */,
@@ -136,6 +155,8 @@
 				AA10589E17A69CBC00234097 /* N4FlickrImageListViewController.m */,
 				AA10589F17A69CBC00234097 /* N4FlickrImageViewController.h */,
 				AA1058A017A69CBC00234097 /* N4FlickrImageViewController.m */,
+				762EEE5B19A229B000F408BD /* NSFavoritesManager.h */,
+				762EEE5C19A229B000F408BD /* NSFavoritesManager.m */,
 				AAEEEECB17A697D200584145 /* Supporting Files */,
 			);
 			path = FlickrTable;
@@ -262,10 +283,13 @@
 			files = (
 				AAEEEED117A697D200584145 /* main.m in Sources */,
 				AA1058A217A69CBC00234097 /* N4AppDelegate.m in Sources */,
+				762EEE6719A22D1400F408BD /* N4ImageEntity.m in Sources */,
 				AA1058A417A69CBC00234097 /* N4FlickrImageCell.m in Sources */,
 				AA1058A517A69CBC00234097 /* N4FlickrImageListViewController.m in Sources */,
 				AA1058A617A69CBC00234097 /* N4FlickrImageViewController.m in Sources */,
+				762EEE6119A22C7600F408BD /* Model.xcdatamodeld in Sources */,
 				AA1058C817A6B02300234097 /* N4FlickrImage.m in Sources */,
+				762EEE5D19A229B000F408BD /* NSFavoritesManager.m in Sources */,
 				AA1058CB17A6B24A00234097 /* N4FlickerImageSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -388,6 +412,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		762EEE5F19A22C7600F408BD /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				762EEE6019A22C7600F408BD /* Model.xcdatamodel */,
+			);
+			currentVersion = 762EEE6019A22C7600F408BD /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AAEEEEB917A697D200584145 /* Project object */;
 }

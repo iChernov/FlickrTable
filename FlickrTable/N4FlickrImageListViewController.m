@@ -16,6 +16,8 @@
 #import "AFNetworking.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <TMCache/TMCache.h>
+#import "NSFavoritesManager.h"
+#import "N4ImageEntity.h"
 
 static NSString * const kN4ImageCache = @"N4ImageCache";
 static const int pageCount = 20;
@@ -31,12 +33,14 @@ static const int pageCount = 20;
 
 @interface N4FlickrImageListViewController ()
 @property (strong, nonatomic) TMCache *p_privateCache;
+@property (strong, nonatomic) NSArray *favorites;
 @end
 
 
 @implementation N4FlickrImageListViewController
 {
     N4FlickerImageSource *_imageSource;
+    BOOL _isRecent;
 }
 
 
@@ -64,12 +68,33 @@ static const int pageCount = 20;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _isRecent = YES;
     _imageSource = [N4FlickerImageSource new];
     self.tableView.rowHeight = 75.0f;
     [self.tableView registerClass:[N4FlickrImageCell class]
         forCellReuseIdentifier:NSStringFromClass([N4FlickrImageCell class])];
     [self startActivityAnimation];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(showFavorites)];
+
     [self updatePhotos];
+}
+
+- (void)showFavorites {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(showRecent)];
+    self.navigationItem.title = @"Favorite Photos";
+    _isRecent = NO;
+     NSFavoritesManager *sharedManager = [NSFavoritesManager sharedManager];
+    _favorites = [sharedManager getImages];
+    [self.view setNeedsDisplay];
+    [self.tableView reloadData];
+}
+
+- (void)showRecent {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(showFavorites)];
+    self.navigationItem.title = @"Recent Photos";
+    _isRecent = YES;
+    [self.view setNeedsDisplay];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -126,36 +151,63 @@ static const int pageCount = 20;
 {
 	N4FlickrImageCell *cell = [tableView dequeueReusableCellWithIdentifier:
         NSStringFromClass([N4FlickrImageCell class])];
-    N4FlickrImage *flickrImage = [_imageSource imageAtIndex:indexPath.row];
     
-    cell.title = flickrImage.title;
-    
-    UIImage *previewImage = [_p_privateCache objectForKey:flickrImage.imagePreviewURLString];
-    if (previewImage) {
-        cell.previewImageView.image = previewImage;
+    if (_isRecent) {
+        N4FlickrImage *flickrImage = [_imageSource imageAtIndex:indexPath.row];
+        
+        cell.title = flickrImage.title;
+        
+        UIImage *previewImage = [_p_privateCache objectForKey:flickrImage.imagePreviewURLString];
+        if (previewImage) {
+            cell.previewImageView.image = previewImage;
+        } else {
+            [cell.previewImageView sd_setImageWithURL:[NSURL URLWithString:flickrImage.imagePreviewURLString]
+                                     placeholderImage:[UIImage imageNamed:@"placeholder.png"]
+                                            completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                                [_p_privateCache setObject:image forKey:flickrImage.imagePreviewURLString];
+                                            }];
+        }
+        if(indexPath.row % pageCount == 3) {
+            [self startLoadingPreviewWithPage:indexPath.row/pageCount];
+        }
     } else {
-        [cell.previewImageView sd_setImageWithURL:[NSURL URLWithString:flickrImage.imagePreviewURLString]
-                                 placeholderImage:[UIImage imageNamed:@"placeholder.png"]
-                                        completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        [_p_privateCache setObject:image forKey:flickrImage.imagePreviewURLString];
-                                        }];
+        N4ImageEntity *imageEntity = [_favorites objectAtIndex: indexPath.row];
+        cell.title = imageEntity.comment;
+        cell.previewImageView.image = [UIImage imageWithData:imageEntity.imageData];
     }
-    if(indexPath.row % pageCount == 3) {
-        [self startLoadingPreviewWithPage:indexPath.row/pageCount];
-    }
+    
+    
 	return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return _imageSource.count;
+    if (_isRecent) {
+        return _imageSource.count;
+    } else {
+        return _favorites.count;
+    }
+	
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // show the selected image in our image view controller
-	N4FlickrImageViewController *ctrl = [[N4FlickrImageViewController alloc]
-                                         initWithFlickrImage:[_imageSource imageAtIndex:indexPath.row]];
-    [self.navigationController pushViewController:ctrl animated:YES];
+    N4FlickrImageViewController *ctrl;
+    if (_isRecent) {
+        ctrl = [[N4FlickrImageViewController alloc]
+                initWithFlickrImage:[_imageSource imageAtIndex:indexPath.row]];
+        [self.navigationController pushViewController:ctrl animated:YES];
+    } else {
+        N4ImageEntity *entity = [_favorites objectAtIndex:indexPath.row];
+#warning not finished!
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"This part is not finished!"
+                                                            message:@"not finished"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    }
+    
 }
 @end

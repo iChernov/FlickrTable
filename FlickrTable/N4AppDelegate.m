@@ -15,7 +15,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+    [MagicalRecord setupAutoMigratingCoreDataStack];
     self.window.rootViewController = [[UINavigationController alloc]
         initWithRootViewController:[[N4FlickrImageListViewController alloc]
             initWithStyle:UITableViewStylePlain]];
